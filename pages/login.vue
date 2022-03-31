@@ -1,8 +1,8 @@
 <template>
   <v-app id="login">
-    <v-content>
-      <v-container  fluid>
-      <!-- class="fill-height" -->
+    <v-main>
+      <v-container fluid>
+        <!-- class="fill-height" -->
         <v-row align="center" justify="center">
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-8">
@@ -19,13 +19,7 @@
                 </v-tooltip>
                 <v-tooltip right>
                   <template v-slot:activator="{ on }">
-                    <v-btn
-                      icon
-                      large
-                      href="#"
-                      target="_blank"
-                      v-on="on"
-                    >
+                    <v-btn icon large href="#" target="_blank" v-on="on">
                       <v-icon>mdi-codepen</v-icon>
                     </v-btn>
                   </template>
@@ -35,9 +29,9 @@
               <v-card-text>
                 <v-form>
                   <v-text-field
-                    v-model="user"
-                    label="Login"
+                    label="Email"
                     name="login"
+                    v-model="email"
                     type="text"
                   />
 
@@ -52,32 +46,59 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" @click="login">Login</v-btn>
+                <v-btn color="primary" @click.prevent="login">Login</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
         </v-row>
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
 <script>
 export default {
   props: {
-    source: String
+    source: String,
   },
   data() {
     return {
+      email: '',
       password: '',
-      user: ''
+      user: '',
     }
   },
   methods: {
-    login() {
-      alert('To be implemented')
-    }
-  }
+    async login() {
+      await this.$axios.$get('/sanctum/csrf-cookie')
+      try {
+        this.$auth
+          .loginWith('laravelSanctum', {
+            data: {
+              email: this.email,
+              password: this.password,
+            },
+          })
+          .then((response) => {
+            console.log('Response is' + response)
+            console.log(response)
+            console.dir(response)
+          })
+          .catch((error) => {
+            console.log(error)
+
+            console.log('err onRejected')
+
+            // this.alert = ''
+            // this.error_msg = error.response.data
+          })
+      } catch (error) {
+        console.log(error.response.data)
+        if (error.response.status === 422) console.log(error.response.data)
+      }
+      // console.log(api)
+      // alert('To be implemented')
+    },
+  },
 }
 </script>
-

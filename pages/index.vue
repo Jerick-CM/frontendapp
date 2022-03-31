@@ -1,88 +1,150 @@
 <template>
-  <v-app id="inspire">
-    <v-app-bar
-      app
-      color="white"
-      flat
-    >
-      <v-avatar
-        :color="$vuetify.breakpoint.smAndDown ? 'grey darken-1' : 'transparent'"
-        size="32"
-      ></v-avatar>
-
-      <v-tabs
-        centered
-        class="ml-n9"
-        color="grey darken-1"
-      >
-        <v-tab
-          v-for="link in links"
-          :key="link"
-        >
-          {{ link }}
-        </v-tab>
-      </v-tabs>
-
-      <v-avatar
-        class="hidden-sm-and-down"
-        color="grey darken-1 shrink"
-        size="32"
-      ></v-avatar>
-    </v-app-bar>
-
-    <v-main class="grey lighten-3">
-      <v-container>
+  <v-container fluid>
+    <v-row>
+      <v-container fluid>
         <v-row>
-          <v-col
-            cols="12"
-            sm="2"
-          >
-            <v-sheet
-              rounded="lg"
-              min-height="268"
+          <v-col>
+            <v-card
+              class="d-flex align-stretch"
+              color="grey lighten-2"
+              flat
+              height="500"
+              tile
             >
-              <!--  -->
-            </v-sheet>
-          </v-col>
-
-          <v-col
-            cols="12"
-            sm="8"
-          >
-            <v-sheet
-              min-height="70vh"
-              rounded="lg"
-            >
-              <!--  -->
-            </v-sheet>
-          </v-col>
-
-          <v-col
-            cols="12"
-            sm="2"
-          >
-            <v-sheet
-              rounded="lg"
-              min-height="268"
-            >
-              <!--  -->
-            </v-sheet>
+              Top Page
+            </v-card>
           </v-col>
         </v-row>
       </v-container>
-    </v-main>
-  </v-app>
+    </v-row>
+    <v-row>
+      <v-container fluid>
+        <v-row>
+          <v-col>
+            <v-card
+              class="d-flex align-stretch"
+              color="grey lighten-2"
+              flat
+              height="500"
+              tile
+            >
+              Mid Page
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-row>
+    <v-row>
+      <v-container fluid>
+        <v-row>
+          <v-col>
+            <v-card
+              class="d-flex align-stretch"
+              color="grey lighten-2"
+              flat
+              height="500"
+              tile
+            >
+              Bottom Page
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      links: [
-        'Dashboard',
-        'Messages',
-        'Profile',
-        'Updates',
+export default {
+  props: [],
+  layout: 'default',
+  head() {
+    return {
+      title: 'Homepage ',
+      meta: [
+        {
+          hid: 'Homepage ',
+          name: 'Homepage ',
+          content: 'IT OFFICE OFFICIAL HOMEPAGE',
+        },
       ],
-    }),
-  }
+    }
+  },
+}
 </script>
+
+<style scoped>
+.dont-break-out {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.font-lulu {
+  font-family: 'Lulu', sans-serif;
+}
+.font-halimun {
+  font-family: 'Halimun', sans-serif;
+}
+/* .font-kalamreg {
+  font-family: 'Kalam-Regular', sans-serif;
+  line-height: 1.2;
+} */
+.font-barlowreg {
+  font-family: 'Barlow-Regular', sans-serif;
+}
+
+.title1 {
+  text-decoration: none;
+}
+.v-application a {
+  color: rgb(66, 77, 238);
+  text-decoration: none;
+}
+
+.adj-title {
+  min-height: 2rem;
+  line-height: 1rem;
+  margin: 0px;
+  padding: 0px;
+}
+
+.hr-blue {
+  border: 3px solid blue;
+}
+.hr-red {
+  border: 3px solid red;
+}
+.hr-orange {
+  border: 3px solid orange;
+}
+.hr-black {
+  border: 3px solid black;
+}
+ul.clean {
+  list-style: none !important;
+  list-style-type: none !important;
+}
+.text-justify {
+  text-align: justify;
+  text-justify: inter-word;
+}
+.hr-brown {
+  border: 3px solid brown;
+}
+.tag-border {
+  border-right: 0.4rem solid #add8e6;
+  border-top: 0.4rem solid #add8e6;
+}
+</style>

@@ -1,58 +1,212 @@
 <template>
-  <v-app id="inspire">
-    <v-system-bar app>
-      <v-spacer></v-spacer>
+  <v-container fluid class="ma-0 pa-0">
+    <v-parallax height="1500" src="/images/register.jpg">
+      <v-row center>
+        <v-col class="col-md-6 offset-md-3  pt-10" cols="12" sm="6">
+          <strong class="ma-2 pa-2 mt-10 pt-10 text-h6">Registration : </strong>
+          <v-card elevation="2" :loading="loading" tile class="ma-2">
+            <!-- dismissible -->
+            <v-alert prominent text type="error" :class="alert" id="alert">{{
+              error_msg
+            }}</v-alert>
 
-      <v-icon>mdi-square</v-icon>
+            <form class="pa-2">
+              <v-text-field
+                class="ma-2 pa-2"
+                v-model="name"
+                :error-messages="nameErrors"
+                :counter="25"
+                label="Name"
+                required
+                @input="$v.name.$touch()"
+                @blur="$v.name.$touch()"
+              ></v-text-field>
 
-      <v-icon>mdi-circle</v-icon>
+              <v-text-field
+                class="ma-2 pa-2"
+                v-model="email"
+                :error-messages="emailErrors"
+                label="E-mail"
+                required
 
-      <v-icon>mdi-triangle</v-icon>
-    </v-system-bar>
+              ></v-text-field>
 
-    <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+              <v-text-field
+                class="ma-2 pa-2"
+                v-model="password"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.required, rules.min]"
+                :type="show1 ? 'text' : 'password'"
+                name="input-10-1"
+                label="Password"
+                hint="At least 6 characters"
+                counter
+                :error-messages="passwordErrors"
+                @click:append="show1 = !show1"
+              >
+              </v-text-field>
 
-      <v-toolbar-title>Application</v-toolbar-title>
-    </v-app-bar>
-
-    <v-navigation-drawer
-      v-model="drawer"
-      fixed
-      temporary
-    >
-      <!--  -->
-    </v-navigation-drawer>
-
-    <v-main class="grey lighten-2">
-      <v-container>
-        <v-row>
-          <template v-for="n in 4">
-            <v-col
-              :key="n"
-              class="mt-2"
-              cols="12"
-            >
-              <strong>Category {{ n }}</strong>
-            </v-col>
-
-            <v-col
-              v-for="j in 6"
-              :key="`${n}${j}`"
-              cols="6"
-              md="2"
-            >
-              <v-sheet height="150"></v-sheet>
-            </v-col>
-          </template>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
+              <v-btn
+                depressed
+                color="primary"
+                class="mr-4 ma-2 pa-2"
+                @click="register"
+              >
+                Register
+              </v-btn>
+              <v-btn
+                depressed
+                color="primary"
+                @click="clear"
+                class="mr-4 ma-2 pa-2"
+              >
+                clear
+              </v-btn>
+            </form>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-parallax>
+  </v-container>
 </template>
-
 <script>
-  export default {
-    data: () => ({ drawer: null }),
+import Vue from 'vue'
+import { Vuelidate, validationMixin } from 'vuelidate'
+
+import { required, maxLength, email, minLength } from 'vuelidate/lib/validators'
+
+Vue.use(Vuelidate)
+
+export default {
+  head() {
+    return {
+      title: 'Registration Page ',
+      meta: [
+        {
+          hid: 'Registration Page ',
+          name: 'Registration Page',
+          content: 'Registration Page'
+        }
+      ]
+    }
+  },
+  mixins: [validationMixin],
+
+  validations: {
+    name: { required, maxLength: maxLength(25) },
+    email: { required, email },
+    password: { required, minLength: minLength(6) }
+  },
+
+  data: () => ({
+    alert: 'd-none',
+    error_msg: '',
+    loading: false,
+    form: {
+      name: '',
+      email: '',
+      password: ''
+    },
+    name: '',
+    email: '',
+    password: '',
+    show1: false,
+    rules: {
+      required: value => !!value || 'Required.',
+      min: v => v.length >= 6 || 'Min 6 characters',
+      emailMatch: () => `The email and password you entered don't match`
+    }
+  }),
+
+  computed: {
+    nameErrors() {
+      const errors = []
+      if (!this.$v.name.$dirty) return errors
+      !this.$v.name.maxLength &&
+        errors.push('Name must be at most 10 characters long')
+      !this.$v.name.required && errors.push('Name is required.')
+      return errors
+    },
+    emailErrors() {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push('Must be valid e-mail')
+      !this.$v.email.required && errors.push('E-mail is required')
+      return errors
+    },
+    passwordErrors() {
+      const passerrors = []
+      if (!this.$v.password.$dirty) return passerrors
+      !this.$v.password.required && passerrors.push('Password is required')
+      return passerrors
+    }
+  },
+
+  methods: {
+    async register() {
+
+      console.log('test register page')
+
+      this.$v.email.$touch();
+      this.$v.password.$touch();
+      this.$v.name.$touch();
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        this.alert = "d-none";
+        this.loading = true;
+        this.form.email = this.email;
+        this.form.password = this.password;
+        this.form.name = this.name;
+        try {
+          await this.$axios.$get("/sanctum/csrf-cookie").then(response => {});
+        } catch (error) {
+          if (error.response.status === 422) console.log(error.response.data);
+        }
+        try {
+          await this.$axios.$post("api/register", this.form);
+            this.$auth
+            .loginWith('laravelSanctum', {
+              data: {
+                email: this.email,
+                password:  this.password,
+              }
+            })
+            .then(response => {
+              console.log('Response is' + response)
+              this.loading = false
+            })
+            .catch(error => {
+              console.log(error)
+              this.loading = false
+              console.log('err onRejected')
+              this.alert = ''
+              this.error_msg = error.response.data
+            })
+
+        } catch (error) {
+          this.alert = "";
+          this.error_msg = error.response.data;
+          if (error.response.status === 422) {
+            console.log(error.response.data);
+          }
+        }
+        this.loading = false;
+      }
+    },
+    clear() {
+      this.$v.$reset()
+      this.form.name = ''
+      this.form.email = ''
+      this.form.password = ''
+
+      this.name = ''
+      this.email = ''
+      this.password = ''
+      this.select = null
+      this.alert = 'd-none'
+      this.error_msg = ''
+      this.$v.$reset()
+    }
   }
+}
 </script>
