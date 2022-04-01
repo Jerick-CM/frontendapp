@@ -146,16 +146,17 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
+    <!-- <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
       <v-list>
         <Nav
           :dialog_login="dialog_login"
           :search="search"
           @update-login="updateLogin"
-          @update-search="updateSearch"
+
         />
       </v-list>
-    </v-navigation-drawer>
+
+    </v-navigation-drawer> -->
 
     <FooterNav />
 
