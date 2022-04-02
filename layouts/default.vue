@@ -200,6 +200,13 @@ export default {
     updateLogin(value) {
       this.dialog_login = value
     },
+    async logout() {
+      try {
+        await this.$auth.logout()
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
 }
 </script>
