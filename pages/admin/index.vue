@@ -3,35 +3,44 @@
     <v-sheet class="blue ligthen-3 pa-5 pt-10 pb-10" min-height="">
       <v-card>
         <v-dialog
-          persistent
           v-model="dialog"
           fullscreen
           hide-overlay
           transition="dialog-bottom-transition"
-          scrollable
         >
           <v-card tile>
+            <v-toolbar flat dark color="primary" max-height="50vh">
+              <v-btn icon dark @click="dialog = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+              <v-toolbar-title>Settings</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-toolbar-items>
+                <v-btn dark text @click="SaveEdited"> Save </v-btn>
+              </v-toolbar-items>
+            </v-toolbar>
             <v-card-text>
               <v-row>
                 <v-col>
                   <v-text-field
-                    v-model="form_title"
-                    label="Title"
-                    @blur="$v.form_title.$touch()"
-                    @input="$v.form_title.$touch()"
+                    class="pt-5"
+                    v-model="form_name"
+                    label="Name"
+                    @blur="$v.form_name.$touch()"
+                    @input="$v.form_name.$touch()"
                   ></v-text-field>
-                  <template v-if="$v.form_title.$error">
+                  <template v-if="$v.form_name.$error">
                     <div
-                      v-if="!$v.form_title.required"
+                      v-if="!$v.form_name.required"
                       class="errorMessage red--text"
                     >
-                      Title is required.
+                      Name is required.
                     </div>
                   </template>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <!-- <v-col>
                   <v-textarea
                     v-model="form_headline"
                     label="Headline"
@@ -46,16 +55,34 @@
                       Headline is required.
                     </div>
                   </template>
-                </v-col>
+                </v-col> -->
               </v-row>
-              <v-row> </v-row>
+              <!-- <v-row>
+                <v-col>
+                  <v-select
+                    v-model="form_publish"
+                    :items="JSON.stringify(data.item)"
+                    item-value="value"
+                    item-text="text"
+                    label="Publish"
+                    @blur="$v.form_publish.$touch()"
+                  />
+                  <template v-if="$v.form_publish.$error">
+                    <p
+                      v-if="!$v.form_publish.required"
+                      class="errorMessage red--text"
+                    >
+                      Select Publish is required.
+                    </p>
+                  </template>
+                </v-col>
+              </v-row> -->
               <v-row>
                 <v-col cols="12">
                   <v-combobox
-                    v-model="form_tags"
+                    v-model="form_role_name"
                     :items="items"
-                    label="Tags"
-                    multiple
+                    label="Role"
                     chips
                   >
                     <template v-slot:selection="data">
@@ -75,6 +102,12 @@
                       </v-chip>
                     </template>
                   </v-combobox>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col class="">
+                  <label for class="black--text">Role</label> <br />
                 </v-col>
               </v-row>
             </v-card-text>
@@ -150,12 +183,12 @@
           <template v-slot:item.created_at="{ item }">
             {{ item.created_at }}
           </template>
-          <!-- <template v-slot:item.id="{ item }">
+          <template v-slot:item.id="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
             <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+          </template>
         </v-data-table>
       </v-card>
     </v-sheet>
@@ -165,13 +198,14 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
-
+import { admin } from '~/mixins/admin_pages.js'
 const dev = process.env.DEV_API
 const prod = process.env.PROD_API
 const url = process.env.NODE_ENV === 'development' ? dev : prod
 
 export default {
-  mixins: [validationMixin],
+  mixins: [validationMixin, admin],
+
   head: () => ({
     title: 'Systeme Users Datatable',
   }),
@@ -191,18 +225,13 @@ export default {
 
       { text: 'Change', value: 'created_at' },
       { text: 'Date/Time', value: 'updated_at' },
-      // { text: 'Action', value: 'id', sortable: false },
+      { text: 'Action', value: 'id', sortable: false },
     ],
 
-    form_content: '',
-    form_title: '',
-    form_headline: '',
-    form_publish: '',
-    form: {
-      name: '',
-      id: '',
-      role: '',
-    },
+    form_id: '',
+    form_name: '',
+    form_role: 'Admin',
+    form_roleId: 1,
     dialog: false,
     dialogDelete: false,
     deletedialog: false,
@@ -215,19 +244,11 @@ export default {
     options: {},
   }),
   validations: {
-    form_content: { required },
-    form_title: { required },
-    form_headline: { required },
-    form_publish: { required },
+    form_id: { required },
+    form_name: { required },
+    form_role: { required },
   },
   async created() {},
-  async fetch() {
-    await this.$axios.$get('/sanctum/csrf-cookie')
-    let response = await this.$axios.$get('api/roles/list')
-    for (const [key, value] of Object.entries(response.data)) {
-      this.items = [...this.items, value.name]
-    }
-  },
   computed: {
     titleErrors() {
       const errors = []
@@ -256,15 +277,61 @@ export default {
       val || this.closeDelete()
     },
   },
-  async fetch() {},
+  async fetch() {
+    await this.$axios.$get('/sanctum/csrf-cookie')
+    let response = await this.$axios.$get('api/role/data')
+    console.log(response)
+    for (const [key, value] of Object.entries(response.data)) {
+      this.items = [...this.items, value.name]
+    }
+  },
   mounted() {
     this.getDataFromApi()
   },
   methods: {
+    async SaveEdited() {
+      await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
+      let payload = new FormData()
+      let table_id = this.tabledata[this.editedIndex].id
+      payload.append('post_id', this.tabledata[this.editedIndex].id)
+      payload.append('title', this.form_title)
+      payload.append('headline', this.form_headline)
+      payload.append('content', this.form_content)
+      payload.append('publish', this.form_publish)
+      payload.append('image', this.form_image)
+
+      try {
+        this.$axios
+          .$post(`api/blog/update/${table_id}`, payload, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((res) => {
+            this.tabledata[this.editedIndex].tags = this.form_tags
+            this.tabledata[this.editedIndex].title = this.form_title
+            this.tabledata[this.editedIndex].content = this.form_content
+            this.tabledata[this.editedIndex].headline = this.form_headline
+
+            this.dialog = false
+            this.form_publish = ''
+            this.image_preview = ''
+            this.$fetch()
+            NProgress.done()
+          })
+          .catch((error) => {
+            this.form_publish = ''
+            NProgress.done()
+          })
+          .finally(() => {})
+      } catch (error) {}
+    },
     editItem(item) {
-      // this.form.id = this.tabledata[this.tabledata.indexOf(item)].id
-      // this.form.name = this.tabledata[this.tabledata.indexOf(item)].name
-      // this.form.role = this.tabledata[this.tabledata.indexOf(item)].role
+      this.form_id = this.tabledata[this.tabledata.indexOf(item)].id
+      this.form_name = this.tabledata[this.tabledata.indexOf(item)].name
+      this.form_role_id = this.tabledata[this.tabledata.indexOf(item)].role_id
+      this.form_role_name =
+        this.tabledata[this.tabledata.indexOf(item)].role_name
       this.editedIndex = this.tabledata.indexOf(item)
       this.dialog = true
     },
@@ -332,6 +399,8 @@ export default {
               no: rowcount,
               name: value.name,
               email: value.email,
+              role_name: value.role_name,
+              role_id: value.role_id,
               created_at: value.created,
               updated_at: value.updated,
             })

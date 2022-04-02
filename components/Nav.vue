@@ -3,8 +3,8 @@
     <v-row>
       <v-col>
         <v-dialog v-model="dialog_login" persistent max-width="500">
-          <template v-slot:activator="{ on, attrs }">
 
+          <template v-slot:activator="{ on, attrs }">
           </template>
           <v-card>
             <v-btn color="green darken-1" text @click.prevent="updateLogin">
@@ -154,24 +154,6 @@
             </v-list-item-content>
           </v-list-item>
 
-          <!-- <v-list-item to="/about">
-            <v-list-item-action>
-              <v-icon>mdi-information-variant</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title> ABOUT</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item> -->
-
-          <!-- <v-list-item to="/contact-us">
-            <v-list-item-action>
-              <v-icon>mdi-human-greeting-proximity </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title> CONTACT US</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item> -->
-
           <v-list-item to="/privacy-policy">
             <v-list-item-action>
               <v-icon>mdi-account-key </v-icon>
@@ -258,11 +240,11 @@ export default {
       this.$emit('update-search', true)
     },
     openLogin() {
-      this.dialog_login = true
+      // this.dialog_login = true
       this.$emit('update-login', true)
     },
     updateLogin() {
-      this.dialog_login = false
+      // this.dialog_login = false
       this.$emit('update-login', false)
     },
     loginwithfacebook() {
@@ -291,7 +273,7 @@ export default {
       this.$v.$reset()
     },
     async logout() {
-      NProgress.start()
+      // NProgress.start()
       try {
         // NProgress.inc()
         await this.$auth.logout()
@@ -326,8 +308,8 @@ export default {
               console.dir(response)
               this.loading = false
               this.$router.push({ name: 'dashboard' })
-              NProgress.done()
-              this.dialog_login = false
+              // NProgress.done()
+              // this.dialog_login = false
               this.$emit('update-login', false)
             })
             .catch(error => {
@@ -336,14 +318,14 @@ export default {
               console.log(error)
               this.loading = false
 
-              NProgress.done()
+              // NProgress.done()
               console.log('err onRejected')
 
               this.alert = ''
               this.error_msg = error.response.data
             })
         } catch (error) {
-          this.dialog_login = false
+          // this.dialog_login = false
           this.$emit('update-login', false)
           this.alert = ''
           this.error_msg = error.response.data

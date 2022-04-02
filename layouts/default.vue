@@ -1,64 +1,13 @@
 <template>
+
   <v-app dark>
+
     <v-app-bar fixed app>
-      <!-- <div
-        plain
-        text
-        class="hidden-md-and-up font-kalamreg hand"
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon color="green" x-large>mdi-message-arrow-left</v-icon> Menu
-      </div> -->
-      <v-spacer />
-      <v-spacer />
-
-      <!-- <div class="hidden-sm-and-down">
-        <v-icon color="blue" @click.stop="rightDrawer = !rightDrawer"
-          >mdi-page-next-outline</v-icon
-        >
-        <v-btn plain text tile class="blue--text pa-1 ma-1 mr-10" to="/">
-          <v-img src="" width="4rem"></v-img>
-        </v-btn>
-
-        <v-btn
-          v-for="(item, i) in navlist"
-          :key="i"
-          :to="item.link"
-          plain
-          text
-          tile
-          rounded
-          class="pa-1 ma-1"
-        >
-          <v-icon>{{ item.icons }}</v-icon> {{ item.label }}
-        </v-btn> -->
-
-      <!-- <v-menu open-on-hover top offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
-              <v-icon color="blue">mdi-chevron-down</v-icon>
-            </v-btn>
-          </template>
-
-          <v-list>
-            <v-list-item
-              v-for="(item, index) in more"
-              :key="index"
-              :to="item.link"
-            >
-              <v-list-item-action>
-                <v-icon>{{ item.icon }} </v-icon>
-              </v-list-item-action>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu> -->
-
-      <!-- </div> -->
 
       <v-spacer />
       <v-spacer />
-
+      <v-spacer />
+      <v-spacer />
       <v-spacer />
 
       <div class="hidden-sm-and-down">
@@ -146,23 +95,17 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <!-- <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
+    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
       <v-list>
         <Nav
           :dialog_login="dialog_login"
           :search="search"
           @update-login="updateLogin"
-
         />
       </v-list>
-
-    </v-navigation-drawer> -->
+    </v-navigation-drawer>
 
     <FooterNav />
-
-    <!-- <v-footer :absolute="!fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer> -->
   </v-app>
 </template>
 
@@ -174,6 +117,7 @@ export default {
   mixins: [navlist],
   data() {
     return {
+      search: '',
       dialog_login: false,
       clipped: false,
       drawer: false,
