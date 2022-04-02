@@ -175,6 +175,7 @@ const dev = process.env.DEV_API
 const prod = process.env.PROD_API
 const url = process.env.NODE_ENV === 'development' ? dev : prod
 
+
 export default {
   mixins: [validationMixin],
   head: () => ({
