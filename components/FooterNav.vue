@@ -51,8 +51,8 @@
           <span>Dark Mode Off</span>
         </v-tooltip>
       </v-card-text>
-      <v-card-text class="d-flex justify-center mb-6" color="info">
-      </v-card-text>
+      <!-- <v-card-text class="d-flex justify-center mb-6" color="info">
+      </v-card-text> -->
       <v-card-text class="pt-0" color="info">
         All rights reserved.
       </v-card-text>

@@ -4,20 +4,26 @@
       <v-container fluid>
         <v-row>
           <v-col>
-            <v-card
+            <v-card fluid
               class="d-flex align-stretch"
               color="grey lighten-2"
               flat
-              height="500"
+              height="850"
               tile
             >
-              Top Page
+              <!-- Top Page -->
+              <v-img
+                max-height="1500"
+                aspect-ratio="1.7"
+                src="/images/Malolos_City_Hall.jpg"
+              >
+              </v-img>
             </v-card>
           </v-col>
         </v-row>
       </v-container>
     </v-row>
-    <v-row>
+    <!-- <v-row>
       <v-container fluid>
         <v-row>
           <v-col>
@@ -33,8 +39,8 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-row>
-    <v-row>
+    </v-row> -->
+    <!-- <v-row>
       <v-container fluid>
         <v-row>
           <v-col>
@@ -50,7 +56,7 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-row>
+    </v-row> -->
   </v-container>
 </template>
 
