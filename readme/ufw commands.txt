@@ -1,0 +1,11 @@
+sudo ufw status verbose | grep -i default
+
+sudo ufw status | grep 22
+
+sudo ufw status | grep -i deny
+
+
+sudo ufw allow 3000
+sudo ufw show added
+
+sudo ufw enable
