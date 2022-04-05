@@ -46,3 +46,23 @@ https://materialdesignicons.com/
 
  pm2 start '/root/.nvm/versions/node/v14.17.0/bin/http-server dist -p 3000' --name nuxt_ssr
 
+
+
+sudo ln -sf /etc/nginx/sites-available/frontend /etc/nginx/sites-enabled/frontend
+
+
+pm2 start '/root/.nvm/versions/node/v14.2.0/bin/http-server  dist -p 3000' --name nuxt_frontend
+
+
+
+
+
+pm2 start '/home/jerickcarlosnatividad/.nvm/versions/node/v14.2.0/bin/http-server dist -p 3000' --name nuxt_frontend
+
+
+pm2 start /usr/bin/http-server --name my-file-server -- -p 8080 -d false
+
+
+which http-server
+
+pm2 start  '/home/jerickcarlosnatividad/.nvm/versions/node/v14.2.0/bin/http-server  dist -p 3000' --name nuxt_frontend
