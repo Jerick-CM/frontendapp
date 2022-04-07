@@ -12,6 +12,7 @@ const _34910a53 = () => interopDefault(import('..\\pages\\login.vue' /* webpackC
 const _aabd6ee0 = () => interopDefault(import('..\\pages\\logout.vue' /* webpackChunkName: "pages/logout" */))
 const _0e5cecae = () => interopDefault(import('..\\pages\\register.vue' /* webpackChunkName: "pages/register" */))
 const _0cc8bc82 = () => interopDefault(import('..\\pages\\registration.vue' /* webpackChunkName: "pages/registration" */))
+const _46e0775a = () => interopDefault(import('..\\pages\\admin\\logs\\index.vue' /* webpackChunkName: "pages/admin/logs/index" */))
 const _c245eb9a = () => interopDefault(import('..\\pages\\admin\\role\\index.vue' /* webpackChunkName: "pages/admin/role/index" */))
 const _abfa9bfe = () => interopDefault(import('..\\pages\\dashboard\\index copy.vue' /* webpackChunkName: "pages/dashboard/index copy" */))
 const _16689190 = () => interopDefault(import('..\\pages\\dashboard\\test.vue' /* webpackChunkName: "pages/dashboard/test" */))
@@ -64,6 +65,10 @@ export const routerOptions = {
     path: "/registration",
     component: _0cc8bc82,
     name: "registration"
+  }, {
+    path: "/admin/logs",
+    component: _46e0775a,
+    name: "admin-logs"
   }, {
     path: "/admin/role",
     component: _c245eb9a,

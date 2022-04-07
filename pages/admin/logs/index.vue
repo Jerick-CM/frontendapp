@@ -3,7 +3,7 @@
     <v-sheet class="blue ligthen-3 pa-5 pt-10 pb-10" min-height="">
       <v-card>
         <v-card-title>
-         Roles Table
+          User Logs
 
           <v-spacer></v-spacer>
 
@@ -62,7 +62,13 @@
           <template v-slot:header.id="{ header }">
             {{ header.text.toUpperCase() }}
           </template>
-          <template v-slot:header.name="{ header }">
+          <template v-slot:header.user_id="{ header }">
+            {{ header.text.toUpperCase() }}
+          </template>
+          <template v-slot:header.type="{ header }">
+            {{ header.text.toUpperCase() }}
+          </template>
+          <template v-slot:header.description="{ header }">
             {{ header.text.toUpperCase() }}
           </template>
           <template v-slot:item.publish="{ item }">
@@ -102,7 +108,9 @@ export default {
         sortable: false,
         value: 'no',
       },
-      { text: 'Role', value: 'name' },
+      { text: 'User ID', value: 'user_id' },
+      { text: 'Type', value: 'type' },
+      { text: 'Description', value: 'description' },
       { text: 'Change', value: 'created_at' },
       { text: 'Date/Time', value: 'updated_at' },
     ],
@@ -258,7 +266,7 @@ export default {
 
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
       this.$axios
-        .$post('api/role/datatable', payload)
+        .$post('api/logs/datatable', payload)
         .then((res) => {
           var data = []
           var rowcount = 1
@@ -272,8 +280,11 @@ export default {
             data.push({
               id: value.id,
               no: rowcount,
+              user_id: value.meta['user_name'],
+              // user_id: value.user_id,
 
-              name: value.name,
+              type: value.type_desc,
+              description: value.description,
               created_at: value.created,
               updated_at: value.updated,
             })

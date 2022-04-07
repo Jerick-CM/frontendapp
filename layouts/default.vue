@@ -53,7 +53,7 @@
           tile
           rounded
           class="pa-1 ma-1"
-          to="/admin/role"
+          to="/admin/logs"
         >
           <v-icon>mdi-abacus</v-icon>
           Logs</v-btn
