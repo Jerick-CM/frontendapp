@@ -1,9 +1,6 @@
 <template>
-
   <v-app dark>
-
     <v-app-bar fixed app>
-
       <v-spacer />
       <v-spacer />
       <v-spacer />
@@ -37,7 +34,30 @@
           <v-icon>mdi-account-tie</v-icon>
           Admin</v-btn
         >
-
+        <v-btn
+          v-if="$auth.user && $auth.loggedIn && $auth.user['is_admin'] == '1'"
+          plain
+          text
+          tile
+          rounded
+          class="pa-1 ma-1"
+          to="/admin/role"
+        >
+          <v-icon>mdi-abacus</v-icon>
+          Roles</v-btn
+        >
+        <v-btn
+          v-if="$auth.user && $auth.loggedIn && $auth.user['is_admin'] == '1'"
+          plain
+          text
+          tile
+          rounded
+          class="pa-1 ma-1"
+          to="/admin/role"
+        >
+          <v-icon>mdi-abacus</v-icon>
+          Logs</v-btn
+        >
         <v-btn
           v-if="$auth.loggedIn"
           plain

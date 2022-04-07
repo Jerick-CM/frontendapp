@@ -153,6 +153,8 @@
             @change="getDataFromApi"
           ></v-text-field>
           <v-spacer></v-spacer>
+
+          <v-btn color="primary" to="admin/user/create">Create</v-btn>
         </v-card-title>
 
         <v-data-table
@@ -375,6 +377,8 @@ export default {
           .catch((error) => {})
           .finally(() => {})
       } catch (error) {}
+
+
     },
     async onChange(value) {
       // console.log(value)

@@ -12,8 +12,11 @@ const _34910a53 = () => interopDefault(import('..\\pages\\login.vue' /* webpackC
 const _aabd6ee0 = () => interopDefault(import('..\\pages\\logout.vue' /* webpackChunkName: "pages/logout" */))
 const _0e5cecae = () => interopDefault(import('..\\pages\\register.vue' /* webpackChunkName: "pages/register" */))
 const _0cc8bc82 = () => interopDefault(import('..\\pages\\registration.vue' /* webpackChunkName: "pages/registration" */))
+const _c245eb9a = () => interopDefault(import('..\\pages\\admin\\role\\index.vue' /* webpackChunkName: "pages/admin/role/index" */))
 const _abfa9bfe = () => interopDefault(import('..\\pages\\dashboard\\index copy.vue' /* webpackChunkName: "pages/dashboard/index copy" */))
 const _16689190 = () => interopDefault(import('..\\pages\\dashboard\\test.vue' /* webpackChunkName: "pages/dashboard/test" */))
+const _647886eb = () => interopDefault(import('..\\pages\\admin\\role\\create.vue' /* webpackChunkName: "pages/admin/role/create" */))
+const _60329ac0 = () => interopDefault(import('..\\pages\\admin\\user\\create.vue' /* webpackChunkName: "pages/admin/user/create" */))
 const _68377ef8 = () => interopDefault(import('..\\pages\\dashboard\\account\\manage.vue' /* webpackChunkName: "pages/dashboard/account/manage" */))
 const _6ae9673c = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 const _f1e5a4fa = () => interopDefault(import('..\\pages\\_username\\index.vue' /* webpackChunkName: "pages/_username/index" */))
@@ -62,6 +65,10 @@ export const routerOptions = {
     component: _0cc8bc82,
     name: "registration"
   }, {
+    path: "/admin/role",
+    component: _c245eb9a,
+    name: "admin-role"
+  }, {
     path: "/dashboard/index%20copy",
     component: _abfa9bfe,
     name: "dashboard-index copy"
@@ -69,6 +76,14 @@ export const routerOptions = {
     path: "/dashboard/test",
     component: _16689190,
     name: "dashboard-test"
+  }, {
+    path: "/admin/role/create",
+    component: _647886eb,
+    name: "admin-role-create"
+  }, {
+    path: "/admin/user/create",
+    component: _60329ac0,
+    name: "admin-user-create"
   }, {
     path: "/dashboard/account/manage",
     component: _68377ef8,
