@@ -3,6 +3,73 @@
     <v-sheet class="blue ligthen-3 pa-5 pt-10 pb-10" min-height="">
       <v-card>
         <v-dialog
+          v-model="dialogsecurity"
+          fullscreen
+          hide-overlay
+          transition="dialog-bottom-transition"
+        >
+          <v-card tile>
+            <v-toolbar flat dark color="primary" max-height="50vh">
+              <v-btn icon dark @click="dialogsecurity = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+              <v-toolbar-title>Account</v-toolbar-title>
+              <v-spacer></v-spacer>
+            </v-toolbar>
+            <v-card-text>
+              <v-row>
+                <v-col>
+                  <v-divider></v-divider>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    class="pt-5"
+                    v-model="form_resetpassword"
+                    label="Enter the desired reset password"
+                  ></v-text-field>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click.prevent="resetPassword()"
+                    >Reset Password</v-btn
+                  >
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-divider></v-divider>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col>
+                  <v-combobox
+                    v-model="selectedstatus"
+                    :items="status_list2"
+                    label="Toggle account enable/disable"
+                  ></v-combobox>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click.prevent="changeStatus()"
+                    >Save</v-btn
+                  >
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-divider></v-divider>
+                </v-col>
+              </v-row>
+            </v-card-text>
+
+            <div style="flex: 1 1 auto"></div>
+          </v-card>
+        </v-dialog>
+
+        <v-dialog
           v-model="dialog"
           fullscreen
           hide-overlay
@@ -16,7 +83,7 @@
               <v-toolbar-title>Settings</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-toolbar-items>
-                <v-btn dark text @click="SaveEdited"> Save </v-btn>
+                <!-- <v-btn dark text @click="save_account"> Save </v-btn> -->
               </v-toolbar-items>
             </v-toolbar>
             <v-card-text>
@@ -37,77 +104,31 @@
                       Name is required.
                     </div>
                   </template>
-                </v-col>
-              </v-row>
-              <v-row>
-                <!-- <v-col>
-                  <v-textarea
-                    v-model="form_headline"
-                    label="Headline"
-                    @blur="$v.form_headline.$touch()"
-                    @input="$v.form_headline.$touch()"
-                  ></v-textarea>
-                  <template v-if="$v.form_headline.$error">
-                    <div
-                      v-if="!$v.form_headline.required"
-                      class="errorMessage red--text"
-                    >
-                      Headline is required.
-                    </div>
-                  </template>
-                </v-col> -->
-              </v-row>
-              <!-- <v-row>
-                <v-col>
-                  <v-select
-                    v-model="form_publish"
-                    :items="JSON.stringify(data.item)"
-                    item-value="value"
-                    item-text="text"
-                    label="Publish"
-                    @blur="$v.form_publish.$touch()"
-                  />
-                  <template v-if="$v.form_publish.$error">
-                    <p
-                      v-if="!$v.form_publish.required"
-                      class="errorMessage red--text"
-                    >
-                      Select Publish is required.
-                    </p>
-                  </template>
-                </v-col>
-              </v-row> -->
-              <v-row>
-                <v-col cols="12">
-                  <v-combobox
-                    v-model="form_role_name"
-                    :items="items"
-                    label="Role"
-                    chips
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click.prevent="update_name()"
+                    >save</v-btn
                   >
-                    <template v-slot:selection="data">
-                      <v-chip
-                        :key="JSON.stringify(data.item)"
-                        v-bind="data.attrs"
-                        :input-value="data.selected"
-                        :disabled="data.disabled"
-                        @click:close="data.parent.selectItem(data.item)"
-                      >
-                        <v-avatar
-                          class="accent white--text"
-                          left
-                          v-text="data.item.slice(0, 1).toUpperCase()"
-                        ></v-avatar>
-                        {{ data.item }}
-                      </v-chip>
-                    </template>
-                  </v-combobox>
                 </v-col>
               </v-row>
 
               <v-row>
-                <v-col class="">
-                  <label for class="black--text">Role</label> <br />
+                <v-col cols="12">
+                  <v-select
+                    v-model="form_role_name"
+                    item-text="text"
+                    item-value="id"
+                    :items="items"
+                    @change="onChange"
+                    return-object
+                  ></v-select>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click.prevent="update_role()"
+                    >save</v-btn
+                  >
                 </v-col>
               </v-row>
             </v-card-text>
@@ -184,6 +205,9 @@
             {{ item.created_at }}
           </template>
           <template v-slot:item.id="{ item }">
+            <v-icon small class="mr-2" @click="secureAccount(item)">
+              mdi-key
+            </v-icon>
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
@@ -207,7 +231,7 @@ export default {
   mixins: [validationMixin, admin],
 
   head: () => ({
-    title: 'Systeme Users Datatable',
+    title: 'System Users Datatable',
   }),
 
   data: () => ({
@@ -226,22 +250,37 @@ export default {
       { text: 'Change', value: 'created_at' },
       { text: 'Date/Time', value: 'updated_at' },
       { text: 'Action', value: 'id', sortable: false },
+      { text: 'Status', value: 'status', sortable: false },
     ],
 
+    item: null,
+
+    role: [],
+    switch1: true,
     form_id: '',
     form_name: '',
     form_role: 'Admin',
     form_roleId: 1,
+    form_role_name: [],
+    form_resetpassword: '',
     dialog: false,
     dialogDelete: false,
     deletedialog: false,
+    dialogsecurity: false,
+    form_resetpassword: '',
     editedIndex: -1,
     search: '',
-
+    status_list: ['Inactive', 'Active'],
+    status_list2: ['Inactive', 'Active'],
+    select: ['Inactive'],
     tabledata: [],
     tabledata_total: 0,
     loading: true,
     options: {},
+    selected_status: ['Inactive'],
+    selectedstatus: '',
+    role: [],
+    data: [],
   }),
   validations: {
     form_id: { required },
@@ -249,20 +288,7 @@ export default {
     form_role: { required },
   },
   async created() {},
-  computed: {
-    titleErrors() {
-      const errors = []
-      if (!this.$v.form_title.$dirty) return errors
-      !this.$v.form_title.required && errors.push('Title is required.')
-      return errors
-    },
-    contentErrors() {
-      const errors = []
-      if (!this.$v.form_content.$dirty) return errors
-      !this.$v.form_content.required && errors.push('Content is required.')
-      return errors
-    },
-  },
+  computed: {},
   watch: {
     options: {
       handler() {
@@ -280,59 +306,140 @@ export default {
   async fetch() {
     await this.$axios.$get('/sanctum/csrf-cookie')
     let response = await this.$axios.$get('api/role/data')
-    console.log(response)
-    for (const [key, value] of Object.entries(response.data)) {
-      this.items = [...this.items, value.name]
-    }
+
+    this.items = response.data.map((d) => ({
+      id: d.id,
+      text: d.name,
+    }))
   },
   mounted() {
     this.getDataFromApi()
   },
+  created() {
+    // console.log('test return')
+  },
   methods: {
-    async SaveEdited() {
+    async update_name() {
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
+
       let payload = new FormData()
       let table_id = this.tabledata[this.editedIndex].id
-      payload.append('post_id', this.tabledata[this.editedIndex].id)
-      payload.append('title', this.form_title)
-      payload.append('headline', this.form_headline)
-      payload.append('content', this.form_content)
-      payload.append('publish', this.form_publish)
-      payload.append('image', this.form_image)
+
+      payload.append('id', table_id)
+      payload.append('user_name', this.form_name)
 
       try {
         this.$axios
-          .$post(`api/blog/update/${table_id}`, payload, {
+          .$post(`api/user/update_username/${table_id}`, payload, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           })
           .then((res) => {
-            this.tabledata[this.editedIndex].tags = this.form_tags
-            this.tabledata[this.editedIndex].title = this.form_title
-            this.tabledata[this.editedIndex].content = this.form_content
-            this.tabledata[this.editedIndex].headline = this.form_headline
-
-            this.dialog = false
-            this.form_publish = ''
-            this.image_preview = ''
+            this.tabledata[this.editedIndex].name = this.form_name
             this.$fetch()
-            NProgress.done()
           })
-          .catch((error) => {
-            this.form_publish = ''
-            NProgress.done()
-          })
+          .catch((error) => {})
           .finally(() => {})
       } catch (error) {}
     },
+    async update_role() {
+      await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
+
+      let payload = new FormData()
+      let table_id = this.tabledata[this.editedIndex].id
+
+      payload.append('id', table_id)
+      payload.append('role_id', this.form_role_name['id'])
+      payload.append('role_name', this.form_role_name['text'])
+
+      try {
+        this.$axios
+          .$post(`api/role/update_role/${table_id}`, payload, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((res) => {
+            this.tabledata[this.editedIndex].role_id = this.form_role_name['id']
+            this.tabledata[this.editedIndex].role_name =
+              this.form_role_name['text']
+
+            this.form_role_name = {
+              text: this.form_role_name['text'],
+              id: this.form_role_name['id'],
+            }
+
+            this.$fetch()
+          })
+          .catch((error) => {})
+          .finally(() => {})
+      } catch (error) {}
+    },
+    async onChange(value) {
+      // console.log(value)
+    },
+    async changeStatus() {
+      await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
+
+      let payload = new FormData()
+      let table_id = this.tabledata[this.editedIndex].id
+
+      payload.append('id', table_id)
+      payload.append('selectedstatus', this.selectedstatus)
+
+      try {
+        this.$axios
+          .$post(`api/user/changestatus/${table_id}`, payload, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((res) => {
+            this.tabledata[this.editedIndex].status = this.selectedstatus
+            this.dialogsecurity = false
+          })
+          .catch((error) => {})
+          .finally(() => {})
+      } catch (error) {}
+    },
+    async resetPassword() {
+      await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
+
+      let payload = new FormData()
+      let table_id = this.tabledata[this.editedIndex].id
+      let newpassword = this.form_resetpassword
+
+      payload.append('id', table_id)
+      payload.append('newpassword', newpassword)
+
+      try {
+        this.$axios
+          .$post(`api/user/resetpassword/${table_id}`, payload, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((res) => {})
+          .catch((error) => {})
+          .finally(() => {})
+      } catch (error) {}
+    },
+
+    // async save_account() {},
+
     editItem(item) {
       this.form_id = this.tabledata[this.tabledata.indexOf(item)].id
       this.form_name = this.tabledata[this.tabledata.indexOf(item)].name
       this.form_role_id = this.tabledata[this.tabledata.indexOf(item)].role_id
-      this.form_role_name =
-        this.tabledata[this.tabledata.indexOf(item)].role_name
+      this.form_role_name = {
+        text: this.tabledata[this.tabledata.indexOf(item)].role_name,
+        id: this.form_role_id,
+      }
+
       this.editedIndex = this.tabledata.indexOf(item)
+
+      console.log(this.form_role_name)
       this.dialog = true
     },
     close() {
@@ -350,17 +457,28 @@ export default {
         this.editedIndex = -1
       })
     },
+
     deleteItem(item) {
       this.editedIndex = this.tabledata.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
+    secureAccount(item) {
+      this.dialogsecurity = true
+      this.editedIndex = this.tabledata.indexOf(item)
+      this.form_id = this.tabledata[this.tabledata.indexOf(item)].id
+      this.selectedstatus = this.tabledata[this.tabledata.indexOf(item)].status
+
+      // this.tabledata.splice(this.editedIndex, 1) delete table row
+      // this.selected_status = [this.selected]
+      // console.log(this.selected_status)
+      // console.log(this.selected)
+      // console.log([this.selected])
+    },
 
     async deleteItemConfirm() {
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
       let table_id = this.tabledata[this.editedIndex].id
-
-      console.log(table_id)
       try {
         this.$axios
           .$delete(`api/user/delete/${table_id}`)
@@ -403,6 +521,8 @@ export default {
               role_id: value.role_id,
               created_at: value.created,
               updated_at: value.updated,
+              is_active: value.is_active,
+              status: value.is_active ? 'Active' : 'Inactive',
             })
             rowcount++
           }

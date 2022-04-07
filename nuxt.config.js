@@ -9,7 +9,7 @@ export default {
   head: {
     titleTemplate: '%s - I.T. OFFICE',
     title: 'ITOFFICE',
-    target:'static',
+    target: 'static',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -41,6 +41,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
+    '@nuxtjs/toast',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -55,7 +56,14 @@ export default {
       lang: 'en',
     },
   },
-
+  extend(config, ctx) {},
+  server: {
+    host: '0.0.0.0', // default: localhost
+  },
+  // server: {
+  //   port: 3000, // default: 3000
+  //   host: '0.0.0.0',
+  // },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
@@ -75,7 +83,7 @@ export default {
     },
   },
   env: {
-    API_URL: api
+    API_URL: api,
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
@@ -98,12 +106,16 @@ export default {
     redirect: {
       login: '/',
       logout: '/',
-      home: '/dashboard'
-    }
+      home: '/dashboard',
+    },
     // Options
   },
   axios: {
     baseURL: api,
-    credentials: true
+    credentials: true,
+  },
+  toast: {
+    position: 'top-right',
+    duration: 3000,
   },
 }

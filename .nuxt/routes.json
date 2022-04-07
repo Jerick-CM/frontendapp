@@ -3,91 +3,78 @@
     "name": "admin",
     "path": "/admin",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\admin\\\\index.vue",
-    "chunkName": "pages/admin/index",
-    "_name": "_203791ae"
+    "chunkName": "pages/admin/index"
   },
   {
     "name": "dashboard",
     "path": "/dashboard",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\dashboard\\\\index.vue",
-    "chunkName": "pages/dashboard/index",
-    "_name": "_61014878"
+    "chunkName": "pages/dashboard/index"
   },
   {
     "name": "index copy",
     "path": "/index%20copy",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\index copy.vue",
-    "chunkName": "pages/index copy",
-    "_name": "_32ed1189"
+    "chunkName": "pages/index copy"
   },
   {
     "name": "inspire",
     "path": "/inspire",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\inspire.vue",
-    "chunkName": "pages/inspire",
-    "_name": "_534efe78"
+    "chunkName": "pages/inspire"
   },
   {
     "name": "login",
     "path": "/login",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\login.vue",
-    "chunkName": "pages/login",
-    "_name": "_34910a53"
+    "chunkName": "pages/login"
   },
   {
     "name": "logout",
     "path": "/logout",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\logout.vue",
-    "chunkName": "pages/logout",
-    "_name": "_aabd6ee0"
+    "chunkName": "pages/logout"
   },
   {
     "name": "register",
     "path": "/register",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\register.vue",
-    "chunkName": "pages/register",
-    "_name": "_0e5cecae"
+    "chunkName": "pages/register"
   },
   {
     "name": "registration",
     "path": "/registration",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\registration.vue",
-    "chunkName": "pages/registration",
-    "_name": "_0cc8bc82"
+    "chunkName": "pages/registration"
   },
   {
     "name": "dashboard-index copy",
     "path": "/dashboard/index%20copy",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\dashboard\\\\index copy.vue",
-    "chunkName": "pages/dashboard/index copy",
-    "_name": "_abfa9bfe"
+    "chunkName": "pages/dashboard/index copy"
   },
   {
     "name": "dashboard-test",
     "path": "/dashboard/test",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\dashboard\\\\test.vue",
-    "chunkName": "pages/dashboard/test",
-    "_name": "_16689190"
+    "chunkName": "pages/dashboard/test"
   },
   {
     "name": "dashboard-account-manage",
     "path": "/dashboard/account/manage",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\dashboard\\\\account\\\\manage.vue",
-    "chunkName": "pages/dashboard/account/manage",
-    "_name": "_68377ef8"
+    "chunkName": "pages/dashboard/account/manage"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\index.vue",
-    "chunkName": "pages/index",
-    "_name": "_6ae9673c"
+    "chunkName": "pages/index"
   },
   {
     "name": "username",
     "path": "/:username",
     "component": "C:\\\\vue\\\\frontendapp\\\\pages\\\\_username\\\\index.vue",
-    "chunkName": "pages/_username/index",
-    "_name": "_f1e5a4fa"
+    "chunkName": "pages/_username/index"
   }
 ]

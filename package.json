@@ -1,6 +1,6 @@
 {
   "name": "frontendapp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -10,7 +10,10 @@
     "lint:prettier": "prettier --check .",
     "lint": "npm run lint:prettier",
     "lintfix": "prettier --write --list-different .",
-    "test": "jest"
+    "test": "jest",
+    "devlan": "nuxt --hostname 0.0.0.0 --port 3000",
+    "dev:host": "nuxt --hostname '0' --port 3000",
+    "devs": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=3333 nuxt"
   },
   "dependencies": {
     "@nuxtjs/auth-next": "5.0.0-1647967358.de1bb0f",

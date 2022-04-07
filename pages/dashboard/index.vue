@@ -3,6 +3,95 @@
     <v-sheet class="blue ligthen-3 pa-5 pt-10 pb-10" min-height="">
       <v-card>
         <v-dialog
+          v-model="dialogsecurity"
+          fullscreen
+          hide-overlay
+          transition="dialog-bottom-transition"
+        >
+          <v-card tile>
+            <v-toolbar flat dark color="primary" max-height="50vh">
+              <v-btn icon dark @click="dialogsecurity = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+              <v-toolbar-title>Change Account</v-toolbar-title>
+              <v-spacer></v-spacer>
+            </v-toolbar>
+            <v-card-text>
+              <v-row>
+                <v-col>
+                  <v-divider></v-divider>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-divider></v-divider>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    name="passfield1"
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="[rules3.required, rules3.min]"
+                    :type="showPassword ? 'text' : 'password'"
+                    class="pt-5"
+                    v-model="password"
+                    label="Enter existing password."
+                    @click:append="showPassword = !showPassword"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    name="passfield2"
+                    :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="[rules3.required, rules3.min]"
+                    :type="showNewPassword ? 'text' : 'password'"
+                    class="pt-5"
+                    v-model="newpassword"
+                    label="Enter new password."
+                    @click:append="showNewPassword = !showNewPassword"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    name="passfield3"
+                    class="pt-5"
+                    v-model="retypepassword"
+                    :type="showRetypePassword ? 'text' : 'password'"
+                    label="Retype new password."
+                    :append-icon="
+                      showRetypePassword ? 'mdi-eye' : 'mdi-eye-off'
+                    "
+                    :rules="[rules3.required, rules3.min]"
+                    @click:append="showRetypePassword = !showRetypePassword"
+                  ></v-text-field>
+
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click.prevent="changePassword()"
+                    >Reset Password</v-btn
+                  >
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col>
+                  <v-divider></v-divider>
+                </v-col>
+              </v-row>
+            </v-card-text>
+
+            <div style="flex: 1 1 auto"></div>
+          </v-card>
+        </v-dialog>
+
+        <v-dialog
           persistent
           v-model="dialog"
           fullscreen
@@ -53,6 +142,8 @@
                 <v-col cols="12">
                   <v-combobox
                     v-model="form_tags"
+                    :item-text="items"
+                    :item-value="items_id"
                     :items="items"
                     label="Tags"
                     multiple
@@ -150,12 +241,14 @@
           <template v-slot:item.created_at="{ item }">
             {{ item.created_at }}
           </template>
-          <!-- <template v-slot:item.id="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">
-              mdi-pencil
+          <template v-slot:item.id="{ item }">
+            <v-icon small class="mr-2" @click="secureAccount(item)">
+              mdi-key
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small class="mr-2" @click="editItem(item)">
+              mdi-pencil
+            </v-icon> -->
+          </template>
         </v-data-table>
       </v-card>
     </v-sheet>
@@ -179,6 +272,7 @@ export default {
   data: () => ({
     form_tags: [],
     items: [],
+    items_id: [],
     headers: [
       {
         text: 'No',
@@ -191,7 +285,8 @@ export default {
 
       { text: 'Change', value: 'created_at' },
       { text: 'Date/Time', value: 'updated_at' },
-      // { text: 'Action', value: 'id', sortable: false },
+      { text: 'Action', value: 'id', sortable: false },
+      { text: 'Status', value: 'status', sortable: false },
     ],
 
     form_content: '',
@@ -208,11 +303,31 @@ export default {
     deletedialog: false,
     editedIndex: -1,
     search: '',
-
+    form_resetpassword: '',
     tabledata: [],
     tabledata_total: 0,
     loading: true,
     options: {},
+    dialogsecurity: false,
+    newpassword: '',
+    retypepassword: '',
+    password: '',
+    showPassword: false,
+    showNewPassword: false,
+
+    showRetypePassword: false,
+    rules1: {
+      required: (value) => !!value || 'Required.',
+      min: (v) => v.length >= 6 || 'Min 6 characters',
+    },
+    rules2: {
+      required: (value) => !!value || 'Required.',
+      min: (v) => v.length >= 6 || 'Min 6 characters',
+    },
+    rules3: {
+      required: (value) => !!value || 'Required.',
+      min: (v) => v.length >= 6 || 'Min 6 characters',
+    },
   }),
   validations: {
     form_content: { required },
@@ -222,26 +337,15 @@ export default {
   },
   async created() {},
   async fetch() {
-    await this.$axios.$get('/sanctum/csrf-cookie')
-    let response = await this.$axios.$get('api/roles/list')
-    for (const [key, value] of Object.entries(response.data)) {
-      this.items = [...this.items, value.name]
-    }
+    // await this.$axios.$get('/sanctum/csrf-cookie')
+    // let response = await this.$axios.$get('api/roles/list')
+    // console.log(response.data);
+    // for (const [key, value] of Object.entries(response.data)) {
+    //   this.items = [...this.items, value.name]
+    //   this.items_id = [...this.items_id, value.id]
+    // }
   },
-  computed: {
-    titleErrors() {
-      const errors = []
-      if (!this.$v.form_title.$dirty) return errors
-      !this.$v.form_title.required && errors.push('Title is required.')
-      return errors
-    },
-    contentErrors() {
-      const errors = []
-      if (!this.$v.form_content.$dirty) return errors
-      !this.$v.form_content.required && errors.push('Content is required.')
-      return errors
-    },
-  },
+  computed: {},
   watch: {
     options: {
       handler() {
@@ -257,10 +361,55 @@ export default {
     },
   },
   async fetch() {},
-  mounted() {
+  async mounted() {
     this.getDataFromApi()
+    // await this.$axios.$get('/sanctum/csrf-cookie')
+    // let response = await this.$axios.$get('api/roles/list')
+
+    // console.log(response.data)
+
+    // for (const [key, value] of Object.entries(response.data)) {
+    //   this.items = [...this.items, value.name]
+    //   this.items_id = [...this.items_id, value.id]
+    // }
   },
   methods: {
+    async changePassword() {
+      if (this.retypepassword != this.newpassword) {
+        this.$toast.error('The new password field does not match.')
+      }
+
+      await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
+      let table_id = this.tabledata[this.editedIndex].id
+      let payload = new FormData()
+
+      payload.append('id', table_id)
+      payload.append('password', this.password)
+      payload.append('newpassword', this.newpassword)
+      payload.append('retypepassword', this.retypepassword)
+
+      console.log(payload)
+
+      try {
+        this.$axios
+          .$post(`api/user/changepassword/${table_id}`, payload, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((res) => {
+            this.dialogsecurity = false
+          })
+          .catch((error) => {})
+          .finally(() => {})
+      } catch (error) {}
+    },
+    secureAccount(item) {
+      this.dialogsecurity = true
+      this.editedIndex = this.tabledata.indexOf(item)
+      this.form_id = this.tabledata[this.tabledata.indexOf(item)].id
+      this.selectedstatus = this.tabledata[this.tabledata.indexOf(item)].status
+    },
     editItem(item) {
       // this.form.id = this.tabledata[this.tabledata.indexOf(item)].id
       // this.form.name = this.tabledata[this.tabledata.indexOf(item)].name
@@ -293,7 +442,6 @@ export default {
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
       let table_id = this.tabledata[this.editedIndex].id
 
-      console.log(table_id)
       try {
         this.$axios
           .$delete(`api/user/delete/${table_id}`)
@@ -308,6 +456,7 @@ export default {
       this.loading = true
       const { sortBy, sortDesc, page, itemsPerPage } = this.options
       let payload = new FormData()
+
       payload.append('sortDesc', sortDesc)
       payload.append('sortBy', sortBy)
       payload.append('page', page)
@@ -316,7 +465,7 @@ export default {
 
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
       this.$axios
-        .$post('api/user/datatable', payload)
+        .$post('api/user/user_datatable', payload)
         .then((res) => {
           var data = []
           var rowcount = 1
@@ -332,8 +481,12 @@ export default {
               no: rowcount,
               name: value.name,
               email: value.email,
+              role_name: value.role_name,
+              role_id: value.role_id,
               created_at: value.created,
               updated_at: value.updated,
+              is_active: value.is_active,
+              status: value.is_active ? 'Active' : 'Inactive',
             })
             rowcount++
           }
