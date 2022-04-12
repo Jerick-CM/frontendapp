@@ -70,7 +70,18 @@
           <v-icon>mdi-monitor-dashboard</v-icon>
           Dashboard</v-btn
         >
-
+        <v-btn
+          v-if="$auth.loggedIn"
+          plain
+          text
+          tile
+          rounded
+          class="pa-1 ma-1"
+          to="/dashboard/user"
+        >
+          <v-icon>mdi-monitor-dashboard</v-icon>
+          user</v-btn
+        >
         <v-btn
           v-if="$auth.loggedIn"
           @click.prevent="logout()"
@@ -96,8 +107,32 @@
           Login</v-btn
         >
       </div>
-      <v-spacer />
-      <v-spacer />
+      <div class="hidden-md-and-up">
+        <!-- class="pa-4 ml-5 mr-5" -->
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <!-- class="pr-4 pl-4 ml-5 mr-5" -->
+            <v-btn v-bind="attrs" v-on="on"> Menu </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in Menu"
+              :key="index"
+              :to="item.link"
+            >
+              <v-list-item-title class="pr-5 pl-5 ml-5 mr-5">{{
+                item.title
+              }}</v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if="$auth.loggedIn" @click.prevent="logout()">
+              <v-icon>mdi-logout</v-icon>
+              <v-list-item-title class="pr-5 pl-5 ml-5 mr-5"
+                >Logout</v-list-item-title
+              >
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
     </v-app-bar>
 
     <v-main>
@@ -137,6 +172,12 @@ export default {
   mixins: [navlist],
   data() {
     return {
+      Menu: [
+        { title: 'admin', link: 'admin' },
+        { title: 'dashboard', link: '/dashboard' },
+        { title: 'user', link: '/dashboard/user' },
+        { title: 'logs', link: '/admin/logs' },
+      ],
       search: '',
       dialog_login: false,
       clipped: false,
