@@ -16,6 +16,7 @@ const _46e0775a = () => interopDefault(import('..\\pages\\admin\\logs\\index.vue
 const _c245eb9a = () => interopDefault(import('..\\pages\\admin\\role\\index.vue' /* webpackChunkName: "pages/admin/role/index" */))
 const _abfa9bfe = () => interopDefault(import('..\\pages\\dashboard\\index copy.vue' /* webpackChunkName: "pages/dashboard/index copy" */))
 const _16689190 = () => interopDefault(import('..\\pages\\dashboard\\test.vue' /* webpackChunkName: "pages/dashboard/test" */))
+const _4ae0f449 = () => interopDefault(import('..\\pages\\dashboard\\user.vue' /* webpackChunkName: "pages/dashboard/user" */))
 const _647886eb = () => interopDefault(import('..\\pages\\admin\\role\\create.vue' /* webpackChunkName: "pages/admin/role/create" */))
 const _60329ac0 = () => interopDefault(import('..\\pages\\admin\\user\\create.vue' /* webpackChunkName: "pages/admin/user/create" */))
 const _68377ef8 = () => interopDefault(import('..\\pages\\dashboard\\account\\manage.vue' /* webpackChunkName: "pages/dashboard/account/manage" */))
@@ -81,6 +82,10 @@ export const routerOptions = {
     path: "/dashboard/test",
     component: _16689190,
     name: "dashboard-test"
+  }, {
+    path: "/dashboard/user",
+    component: _4ae0f449,
+    name: "dashboard-user"
   }, {
     path: "/admin/role/create",
     component: _647886eb,
