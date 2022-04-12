@@ -19,8 +19,6 @@
               @input="$v.name.$touch()"
               @blur="$v.name.$touch()"
             ></v-text-field>
-
-
           </v-col>
         </v-row>
 
@@ -54,11 +52,17 @@ const dev = process.env.DEV_API
 const prod = process.env.PROD_API
 const url = process.env.NODE_ENV === 'development' ? dev : prod
 
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+import { admin } from '~/mixins/admin_pages.js'
+
 export default {
   head: () => ({
     title: 'Create User',
   }),
-  mixins: [validationMixin],
+
+  mixins: [validationMixin, admin],
+  middleware: 'auth',
   data: () => ({
     alert: 'd-none',
     error_msg: '',
@@ -81,7 +85,6 @@ export default {
 
   validations: {
     name: { required, maxLength: maxLength(25) },
-
   },
   components: {},
   async mounted() {},
@@ -112,7 +115,8 @@ export default {
   },
   methods: {
     async add_role() {
-
+      NProgress.start()
+      this.$toast.success('Requesting.')
       this.$v.name.$touch()
       this.$v.$touch()
 
@@ -120,8 +124,9 @@ export default {
         this.alert = 'd-none'
         this.loading = true
         this.form.name = this.name.trim()
-
+        NProgress.inc()
         await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
+        NProgress.inc()
         let payload = new FormData()
         payload.append('name', this.name)
 
@@ -132,11 +137,17 @@ export default {
                 'Content-Type': 'multipart/form-data',
               },
             })
-            .then((res) => {})
-            .catch((error) => {})
+            .then((res) => {
+              this.$toast.success('Done.')
+            })
+            .catch((error) => {
+              this.$toast.error('Failed.')
+            })
             .finally(() => {})
-        } catch (error) {}
-
+        } catch (error) {
+          this.$toast.error('Failed.')
+        }
+        NProgress.done()
         this.loading = false
       }
     },

@@ -225,6 +225,9 @@
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import { admin } from '~/mixins/admin_pages.js'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 const dev = process.env.DEV_API
 const prod = process.env.PROD_API
 const url = process.env.NODE_ENV === 'development' ? dev : prod
@@ -322,6 +325,9 @@ export default {
   },
   methods: {
     async update_name() {
+      NProgress.start()
+      NProgress.inc()
+      this.$toast.success('Processing')
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
 
       let payload = new FormData()
@@ -329,7 +335,7 @@ export default {
 
       payload.append('id', table_id)
       payload.append('user_name', this.form_name)
-
+      NProgress.inc()
       try {
         this.$axios
           .$post(`api/user/update_username/${table_id}`, payload, {
@@ -340,12 +346,17 @@ export default {
           .then((res) => {
             this.tabledata[this.editedIndex].name = this.form_name
             this.$fetch()
+            this.$toast.success('Done.')
           })
           .catch((error) => {})
           .finally(() => {})
-      } catch (error) {}
+        NProgress.done()
+      } catch (error) {
+        this.$toast.error('Failed.')
+      }
     },
     async update_role() {
+      this.$toast.success('Processing')
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
 
       let payload = new FormData()
@@ -363,6 +374,7 @@ export default {
             },
           })
           .then((res) => {
+            this.$toast.success('Done.')
             this.tabledata[this.editedIndex].role_id = this.form_role_name['id']
             this.tabledata[this.editedIndex].role_name =
               this.form_role_name['text']
@@ -374,16 +386,14 @@ export default {
 
             this.$fetch()
           })
-          .catch((error) => {})
+          .catch((error) => {
+            this.$toast.error('Failed.')
+          })
           .finally(() => {})
       } catch (error) {}
-
-
-    },
-    async onChange(value) {
-      // console.log(value)
     },
     async changeStatus() {
+      this.$toast.success('Processing')
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
 
       let payload = new FormData()
@@ -400,14 +410,18 @@ export default {
             },
           })
           .then((res) => {
+            this.$toast.success('Done')
             this.tabledata[this.editedIndex].status = this.selectedstatus
             this.dialogsecurity = false
           })
-          .catch((error) => {})
+          .catch((error) => {
+            this.$toast.error('Failed.')
+          })
           .finally(() => {})
       } catch (error) {}
     },
     async resetPassword() {
+      this.$toast.success('Processing.')
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
 
       let payload = new FormData()
@@ -424,13 +438,15 @@ export default {
               'Content-Type': 'multipart/form-data',
             },
           })
-          .then((res) => {})
-          .catch((error) => {})
+          .then((res) => {
+            this.$toast.success('Done')
+          })
+          .catch((error) => {
+            this.$toast.error('Failed.')
+          })
           .finally(() => {})
       } catch (error) {}
     },
-
-    // async save_account() {},
 
     editItem(item) {
       this.form_id = this.tabledata[this.tabledata.indexOf(item)].id
@@ -472,15 +488,10 @@ export default {
       this.editedIndex = this.tabledata.indexOf(item)
       this.form_id = this.tabledata[this.tabledata.indexOf(item)].id
       this.selectedstatus = this.tabledata[this.tabledata.indexOf(item)].status
-
-      // this.tabledata.splice(this.editedIndex, 1) delete table row
-      // this.selected_status = [this.selected]
-      // console.log(this.selected_status)
-      // console.log(this.selected)
-      // console.log([this.selected])
     },
 
     async deleteItemConfirm() {
+      this.$toast.success('Processing')
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
       let table_id = this.tabledata[this.editedIndex].id
       try {
@@ -489,11 +500,15 @@ export default {
           .then((res) => {})
           .catch((error) => {})
           .finally(() => {})
-      } catch (error) {}
+        this.$toast.success('Done.')
+      } catch (error) {
+        this.$toast.error('Failed.')
+      }
       this.tabledata.splice(this.editedIndex, 1)
       this.closeDelete()
     },
     async getDataFromApi() {
+      // this.$toast.success('Generating Data.')
       this.loading = true
       const { sortBy, sortDesc, page, itemsPerPage } = this.options
       let payload = new FormData()
@@ -534,6 +549,7 @@ export default {
           this.tabledata = data
           this.tabledata_total = res.total
           this.loading = false
+          // this.$toast.success('Done.')
         })
         .catch((error) => {
           this.loading = false

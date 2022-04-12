@@ -66,6 +66,8 @@
 </template>
 
 <script>
+import { admin } from '~/mixins/admin_pages.js'
+
 import Vue from 'vue'
 import { Vuelidate, validationMixin } from 'vuelidate'
 import { required, maxLength, email, minLength } from 'vuelidate/lib/validators'
@@ -78,7 +80,8 @@ export default {
   head: () => ({
     title: 'Create User',
   }),
-  mixins: [validationMixin],
+  middleware: 'auth',
+  mixins: [validationMixin, admin],
   data: () => ({
     alert: 'd-none',
     error_msg: '',
@@ -133,17 +136,15 @@ export default {
   },
   methods: {
     async register() {
-
       this.$v.email.$touch()
       this.$v.password.$touch()
       this.$v.name.$touch()
       this.$v.$touch()
 
       if (!this.$v.$invalid) {
-
         this.alert = 'd-none'
         this.loading = true
-        this.form.email = (this.email).trim()
+        this.form.email = this.email.trim()
         this.form.password = this.password
         this.form.name = this.name
 

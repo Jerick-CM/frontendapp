@@ -3,10 +3,9 @@
     <v-sheet class="blue ligthen-3 pa-5 pt-10 pb-10" min-height="">
       <v-card>
         <v-card-title>
-         Roles Table
+          Roles Table
 
           <v-spacer></v-spacer>
-
           <v-spacer></v-spacer>
 
           <v-text-field
@@ -19,7 +18,6 @@
           ></v-text-field>
           <v-spacer></v-spacer>
           <v-btn color="primary" to="/admin/role/create">Create</v-btn>
-          <!-- <v-btn color="primary" to="admin/role/create">Create</v-btn> -->
         </v-card-title>
 
         <v-data-table
@@ -71,6 +69,9 @@
           <template v-slot:item.created_at="{ item }">
             {{ item.created_at }}
           </template>
+          <template v-slot:item.id="{ item }">
+            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+          </template>
         </v-data-table>
       </v-card>
     </v-sheet>
@@ -91,7 +92,7 @@ export default {
   head: () => ({
     title: 'System Users Datatable',
   }),
-
+  middleware: 'auth',
   data: () => ({
     form_tags: [],
     items: [],
@@ -103,8 +104,10 @@ export default {
         value: 'no',
       },
       { text: 'Role', value: 'name' },
+
       { text: 'Change', value: 'created_at' },
       { text: 'Date/Time', value: 'updated_at' },
+      { text: 'Action', value: 'id', sortable: false },
     ],
 
     item: null,
@@ -163,6 +166,36 @@ export default {
   },
   created() {},
   methods: {
+    async deleteItemConfirm() {
+      this.$toast.success('Processing')
+      await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
+      let table_id = this.tabledata[this.editedIndex].id
+      try {
+        this.$axios
+          .$delete(`api/role/delete/${table_id}`)
+          .then((res) => {})
+          .catch((error) => {})
+          .finally(() => {})
+        this.$toast.success('Done.')
+      } catch (error) {
+        this.$toast.error('Failed.')
+      }
+      this.tabledata.splice(this.editedIndex, 1)
+      this.closeDelete()
+    },
+    closeDelete() {
+      this.dialogDelete = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.tabledata.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialogDelete = true
+    },
     async update_name() {
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
 
@@ -220,7 +253,7 @@ export default {
           .finally(() => {})
       } catch (error) {}
     },
-    async onChange(value) {},
+
     async changeStatus() {
       await this.$axios.$get('/sanctum/csrf-cookie').then((response) => {})
 

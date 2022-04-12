@@ -258,6 +258,8 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 const dev = process.env.DEV_API
 const prod = process.env.PROD_API
@@ -375,6 +377,8 @@ export default {
   },
   methods: {
     async changePassword() {
+      this.$toast.success('Requesting.')
+
       if (this.retypepassword != this.newpassword) {
         this.$toast.error('The new password field does not match.')
       }
@@ -400,9 +404,15 @@ export default {
           .then((res) => {
             this.dialogsecurity = false
           })
-          .catch((error) => {})
-          .finally(() => {})
-      } catch (error) {}
+          .catch((error) => {
+            this.$toast.success('Requesting.')
+          })
+          .finally(() => {
+            this.$toast.error('Failed.')
+          })
+      } catch (error) {
+        this.$toast.error('Failed.')
+      }
     },
     secureAccount(item) {
       this.dialogsecurity = true
@@ -411,9 +421,6 @@ export default {
       this.selectedstatus = this.tabledata[this.tabledata.indexOf(item)].status
     },
     editItem(item) {
-      // this.form.id = this.tabledata[this.tabledata.indexOf(item)].id
-      // this.form.name = this.tabledata[this.tabledata.indexOf(item)].name
-      // this.form.role = this.tabledata[this.tabledata.indexOf(item)].role
       this.editedIndex = this.tabledata.indexOf(item)
       this.dialog = true
     },
