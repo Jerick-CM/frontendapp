@@ -15,6 +15,7 @@ import { createStore } from './store.js'
 
 import nuxt_plugin_plugin_291987ca from 'nuxt_plugin_plugin_291987ca' // Source: .\\components\\plugin.js (mode: 'all')
 import nuxt_plugin_plugin_2a646db9 from 'nuxt_plugin_plugin_2a646db9' // Source: .\\vuetify\\plugin.js (mode: 'all')
+import nuxt_plugin_plugin_b9d25828 from 'nuxt_plugin_plugin_b9d25828' // Source: .\\nuxt-highcharts\\plugin.js (mode: 'all')
 import nuxt_plugin_toast_3c980d6d from 'nuxt_plugin_toast_3c980d6d' // Source: .\\toast.js (mode: 'client')
 import nuxt_plugin_workbox_774afe5a from 'nuxt_plugin_workbox_774afe5a' // Source: .\\workbox.js (mode: 'client')
 import nuxt_plugin_metaplugin_2066f8da from 'nuxt_plugin_metaplugin_2066f8da' // Source: .\\pwa\\meta.plugin.js (mode: 'all')
@@ -88,7 +89,7 @@ async function createApp(ssrContext, config = {}) {
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
-    head: {"titleTemplate":"%s - I.T. OFFICE","title":"ITOFFICE","target":"static","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"},{"hid":"charset","charset":"utf-8"},{"hid":"mobile-web-app-capable","name":"mobile-web-app-capable","content":"yes"},{"hid":"apple-mobile-web-app-title","name":"apple-mobile-web-app-title","content":"frontendapp"},{"hid":"og:type","name":"og:type","property":"og:type","content":"website"},{"hid":"og:title","name":"og:title","property":"og:title","content":"frontendapp"},{"hid":"og:site_name","name":"og:site_name","property":"og:site_name","content":"frontendapp"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Roboto:100,300,400,500,700,900&display=swap"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Fcdn.jsdelivr.net\u002Fnpm\u002F@mdi\u002Ffont@latest\u002Fcss\u002Fmaterialdesignicons.min.css"},{"hid":"shortcut-icon","rel":"shortcut icon","href":"\u002F_nuxt\u002Ficons\u002Ficon_64x64.e3e9fb.png"},{"hid":"apple-touch-icon","rel":"apple-touch-icon","href":"\u002F_nuxt\u002Ficons\u002Ficon_512x512.e3e9fb.png","sizes":"512x512"},{"rel":"manifest","href":"\u002F_nuxt\u002Fmanifest.640ea911.json","hid":"manifest"}],"style":[],"script":[],"htmlAttrs":{"lang":"en"}},
+    head: {"titleTemplate":"%s - I.T. OFFICE","title":"ITOFFICE","target":"static","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Roboto:100,300,400,500,700,900&display=swap"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Fcdn.jsdelivr.net\u002Fnpm\u002F@mdi\u002Ffont@latest\u002Fcss\u002Fmaterialdesignicons.min.css"}],"style":[],"script":[]},
 
     store,
     router,
@@ -223,6 +224,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof nuxt_plugin_plugin_2a646db9 === 'function') {
     await nuxt_plugin_plugin_2a646db9(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_plugin_b9d25828 === 'function') {
+    await nuxt_plugin_plugin_b9d25828(app.context, inject)
   }
 
   if (process.client && typeof nuxt_plugin_toast_3c980d6d === 'function') {

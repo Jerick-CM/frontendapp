@@ -42,6 +42,7 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
     '@nuxtjs/toast',
+    'nuxt-highcharts',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
